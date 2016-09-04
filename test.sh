@@ -34,7 +34,7 @@ test_grace() {
 				echo $df
 			fi
 		else
-			echo "Fail. grace_kid.c was not created"
+			echo "\x1b[31mFAIL: Grace_kid was not created\x1b[0m"
 		fi
 		rm -f grace Grace_kid.c
 	else
@@ -49,13 +49,16 @@ test_sully() {
 		echo "Testing Sully:"
 		gcc -Wall -Wextra -Werror Sully.c -o Sully
 		./Sully
+		echo "Diffs:"
 		for bin in Sully_5 Sully_4 Sully_3 Sully_2 Sully_1 Sully_0; do
 			if [ -f $bin ] && [ -f $bin.c ]; then
 				df=`diff Sully.c $bin.c`
-				echo "Diff Sully.c <-> $bin.c"
-				echo $df
-				echo "-----------------------"
+				echo "$bin.c:"
+				echo "======================="
+				diff Sully.c $bin.c
+				echo "======================="
 				rm -f $bin $bin.c
+				echo ""
 			else
 				echo "\x1b[31mFAIL: $bin doesn't exist\x1b[0m"
 				return
